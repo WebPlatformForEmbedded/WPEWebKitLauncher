@@ -45,6 +45,12 @@ int main(int argc, char* argv[])
     auto pageGroup = WKPageGroupCreateWithIdentifier(pageGroupIdentifier);
     WKRelease(pageGroupIdentifier);
 
+    auto preferences = WKPreferencesCreate();
+    // Allow mixed content.
+    WKPreferencesSetAllowRunningOfInsecureContent(preferences, true);
+    WKPreferencesSetAllowDisplayOfInsecureContent(preferences, true);
+    WKPageGroupSetPreferences(pageGroup, preferences);
+
     auto pageConfiguration  = WKPageConfigurationCreate();
     WKPageConfigurationSetContext(pageConfiguration, context);
     WKPageConfigurationSetPageGroup(pageConfiguration, pageGroup);
@@ -72,6 +78,7 @@ int main(int argc, char* argv[])
     WKRelease(pageConfiguration);
     WKRelease(pageGroup);
     WKRelease(context);
+    WKRelease(preferences);
     g_main_loop_unref(loop);
     return 0;
 }
