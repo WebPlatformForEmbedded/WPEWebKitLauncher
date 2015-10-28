@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
     auto page = WKViewGetPage(view);
     WKPageSetPageNavigationClient(page, &s_navigationClient.base);
 
-    const char* url = "http://widgets.metrological.com/metrological/nl/rpi";
+    const char* url = "http://youtube.com/tv";
     if (argc > 1)
         url = argv[1];
 
