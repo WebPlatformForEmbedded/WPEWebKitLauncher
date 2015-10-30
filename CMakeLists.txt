@@ -12,6 +12,15 @@ add_executable(WPELauncher
 find_package(BCMHost REQUIRED)
 find_package(WPEWebKit REQUIRED)
 
+file(WRITE ${CMAKE_BINARY_DIR}/test_atomic.cpp
+     "#include <atomic>\n"
+     "int main() { std::atomic<int64_t> i(0); i++; return 0; }\n")
+try_compile(ATOMIC_BUILD_SUCCEEDED ${CMAKE_BINARY_DIR} ${CMAKE_BINARY_DIR}/test_atomic.cpp)
+if (NOT ATOMIC_BUILD_SUCCEEDED)
+    list(APPEND WPE_WEBKIT_LIBRARIES atomic)
+endif ()
+file(REMOVE ${CMAKE_BINARY_DIR}/test_atomic.cpp)
+
 target_include_directories(WPELauncher PUBLIC
     ${CMAKE_SOURCE_DIR}
     ${BCM_HOST_INCLUDE_DIRS}
