@@ -76,6 +76,7 @@ int main(int argc, char* argv[])
 #if defined(TARGET_RPI) && TARGET_RPI
     uint32_t width = 0, height = 0;
     graphics_get_display_size(DISPMANX_ID_HDMI, &width, &height);
+    WKViewResize(view, WKSizeMake(width, height));
 #else
     WKViewResize(view, WKSizeMake(1280, 720));
 #endif
