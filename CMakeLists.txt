@@ -9,7 +9,6 @@ add_executable(WPELauncher
     main.cpp
 )
 
-find_package(BCMHost REQUIRED)
 find_package(WPEWebKit REQUIRED)
 
 file(WRITE ${CMAKE_BINARY_DIR}/test_atomic.cpp
@@ -23,11 +22,9 @@ file(REMOVE ${CMAKE_BINARY_DIR}/test_atomic.cpp)
 
 target_include_directories(WPELauncher PUBLIC
     ${CMAKE_SOURCE_DIR}
-    ${BCM_HOST_INCLUDE_DIRS}
     ${WPE_WEBKIT_INCLUDE_DIRS}
 )
 target_link_libraries(WPELauncher
-    ${BCM_HOST_LIBRARIES}
     ${WPE_WEBKIT_LIBRARIES}
 )
 
