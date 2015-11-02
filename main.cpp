@@ -3,10 +3,6 @@
 
 #include <glib.h>
 
-#if defined(TARGET_RPI) && TARGET_RPI
-#include <bcm_host.h>
-#endif
-
 WKPageNavigationClientV0 s_navigationClient = {
     { 0, nullptr },
     // decidePolicyForNavigationAction
@@ -40,10 +36,6 @@ WKPageNavigationClientV0 s_navigationClient = {
 
 int main(int argc, char* argv[])
 {
-#if defined(TARGET_RPI) && TARGET_RPI
-    bcm_host_init();
-#endif
-
     GMainLoop* loop = g_main_loop_new(nullptr, FALSE);
 
     WKContextRef context = WKContextCreate();
@@ -70,17 +62,7 @@ int main(int argc, char* argv[])
       WKCookieManagerSetCookiePersistentStorage(cookieManager, path, kWKCookieStorageTypeSQLite);
     }
 
-
     auto view = WKViewCreate(pageConfiguration);
-
-#if defined(TARGET_RPI) && TARGET_RPI
-    uint32_t width = 0, height = 0;
-    graphics_get_display_size(DISPMANX_ID_HDMI, &width, &height);
-    WKViewResize(view, WKSizeMake(width, height));
-#else
-    WKViewResize(view, WKSizeMake(1280, 720));
-#endif
-
     auto page = WKViewGetPage(view);
     WKPageSetPageNavigationClient(page, &s_navigationClient.base);
 
