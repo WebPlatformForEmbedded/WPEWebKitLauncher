@@ -5,10 +5,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-add_executable(WPELauncher
-    main.cpp
-)
-
 find_package(WPEWebKit REQUIRED)
 
 file(WRITE ${CMAKE_BINARY_DIR}/test_atomic.cpp
@@ -20,12 +16,4 @@ if (NOT ATOMIC_BUILD_SUCCEEDED)
 endif ()
 file(REMOVE ${CMAKE_BINARY_DIR}/test_atomic.cpp)
 
-target_include_directories(WPELauncher PUBLIC
-    ${CMAKE_SOURCE_DIR}
-    ${WPE_WEBKIT_INCLUDE_DIRS}
-)
-target_link_libraries(WPELauncher
-    ${WPE_WEBKIT_LIBRARIES}
-)
-
-install(TARGETS WPELauncher DESTINATION "${CMAKE_INSTALL_PREFIX}/bin")
+add_subdirectory(launcher)
