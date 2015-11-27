@@ -16,4 +16,5 @@ if (NOT ATOMIC_BUILD_SUCCEEDED)
 endif ()
 file(REMOVE ${CMAKE_BINARY_DIR}/test_atomic.cpp)
 
+add_subdirectory(injectedbundle)
 add_subdirectory(launcher)
