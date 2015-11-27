@@ -3,7 +3,6 @@ add_executable(WPELauncher
 )
 
 target_include_directories(WPELauncher PUBLIC
-    ${CMAKE_SOURCE_DIR}
     ${WPE_WEBKIT_INCLUDE_DIRS}
 )
 target_link_libraries(WPELauncher
