@@ -38,7 +38,13 @@ int main(int argc, char* argv[])
 {
     GMainLoop* loop = g_main_loop_new(nullptr, FALSE);
 
-    WKContextRef context = WKContextCreate();
+    auto contextConfiguration = WKContextConfigurationCreate();
+    auto injectedBundlePath = WKStringCreateWithUTF8CString("/usr/lib/libWPEInjectedBundle.so");
+    WKContextConfigurationSetInjectedBundlePath(contextConfiguration, injectedBundlePath);
+    WKRelease(injectedBundlePath);
+
+    WKContextRef context = WKContextCreateWithConfiguration(contextConfiguration);
+    WKRelease(contextConfiguration);
 
     auto pageGroupIdentifier = WKStringCreateWithUTF8CString("WPEPageGroup");
     auto pageGroup = WKPageGroupCreateWithIdentifier(pageGroupIdentifier);
