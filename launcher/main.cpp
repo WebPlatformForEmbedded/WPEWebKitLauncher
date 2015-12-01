@@ -1,7 +1,9 @@
 #include <WPE/WebKit.h>
 #include <WPE/WebKit/WKCookieManagerSoup.h>
 
+#include <cstdio>
 #include <glib.h>
+#include <initializer_list>
 
 WKPageNavigationClientV0 s_navigationClient = {
     { 0, nullptr },
@@ -21,7 +23,22 @@ WKPageNavigationClientV0 s_navigationClient = {
     nullptr, // didFinishNavigation
     nullptr, // didFailNavigation
     nullptr, // didFailProvisionalLoadInSubframe
-    nullptr, // didFinishDocumentLoad
+    // didFinishDocumentLoad
+    [](WKPageRef page, WKNavigationRef, WKTypeRef, const void*) {
+        WKStringRef messageName = WKStringCreateWithUTF8CString("Hello");
+        WKMutableArrayRef messageBody = WKMutableArrayCreate();
+
+        for (auto& item : { "Test1", "Test2", "Test3" }) {
+            WKStringRef itemString = WKStringCreateWithUTF8CString(item);
+            WKArrayAppendItem(messageBody, itemString);
+            WKRelease(itemString);
+        }
+
+        fprintf(stderr, "[WPELauncher] Hello InjectedBundle ...\n");
+        WKPagePostMessageToInjectedBundle(page, messageName, messageBody);
+        WKRelease(messageBody);
+        WKRelease(messageName);
+    },
     nullptr, // didSameDocumentNavigation
     nullptr, // renderingProgressDidChange
     nullptr, // canAuthenticateAgainstProtectionSpace
