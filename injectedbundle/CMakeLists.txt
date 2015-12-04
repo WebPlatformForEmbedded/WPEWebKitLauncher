@@ -1,4 +1,4 @@
-add_library(WPEInjectedBundle
+add_library(WPEInjectedBundle SHARED
     main.cpp
 )
 
