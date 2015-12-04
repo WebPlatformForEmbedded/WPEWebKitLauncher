@@ -1,0 +1,20 @@
+<script>
+function test()
+{
+    console.log("In test(), window.wpe " + window.wpe);
+
+    // wpe.value1 should return 15
+    console.log("wpe.value1 = " + wpe.value1);
+
+    // wpe.value1 should return 16
+    console.log("wpe.value2 = " + wpe.value2);
+    console.log("setting wpe.value2 to 23 ...");
+    wpe.value2 = 23;
+    // wpe.value1 should now return 23
+    console.log("wpe.value2 = " + wpe.value2);
+
+    // wpe.function1() should return 'function1 return value' as string
+    console.log("wpe.function1() returns '" + wpe.function1() + "'");
+}
+</script>
+<body onload=test()></body>
