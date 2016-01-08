@@ -71,6 +71,7 @@ int main(int argc, char* argv[])
     // Allow mixed content.
     WKPreferencesSetAllowRunningOfInsecureContent(preferences, true);
     WKPreferencesSetAllowDisplayOfInsecureContent(preferences, true);
+    WKPreferencesSetLogsPageMessagesToSystemConsoleEnabled(preferences, true);
     WKPageGroupSetPreferences(pageGroup, preferences);
 
     auto pageConfiguration  = WKPageConfigurationCreate();
