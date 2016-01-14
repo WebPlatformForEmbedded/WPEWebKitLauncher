@@ -71,7 +71,11 @@ int main(int argc, char* argv[])
     // Allow mixed content.
     WKPreferencesSetAllowRunningOfInsecureContent(preferences, true);
     WKPreferencesSetAllowDisplayOfInsecureContent(preferences, true);
-    WKPreferencesSetLogsPageMessagesToSystemConsoleEnabled(preferences, true);
+
+    // By default allow console log messages to system console reporting.
+    if (!g_getenv("WPE_SHELL_DISABLE_CONSOLE_LOG"))
+      WKPreferencesSetLogsPageMessagesToSystemConsoleEnabled(preferences, true);
+
     WKPageGroupSetPreferences(pageGroup, preferences);
 
     auto pageConfiguration  = WKPageConfigurationCreate();
