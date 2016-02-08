@@ -81,6 +81,7 @@ int main(int argc, char* argv[])
     auto pageConfiguration  = WKPageConfigurationCreate();
     WKPageConfigurationSetContext(pageConfiguration, context);
     WKPageConfigurationSetPageGroup(pageConfiguration, pageGroup);
+    WKPreferencesSetFullScreenEnabled(preferences, true);
 
     if (!!g_getenv("WPE_SHELL_COOKIE_STORAGE")) {
       gchar *cookieDatabasePath = g_build_filename(g_get_user_cache_dir(), "cookies.db", nullptr);
