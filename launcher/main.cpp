@@ -58,6 +58,19 @@ int main(int argc, char* argv[])
     auto contextConfiguration = WKContextConfigurationCreate();
     auto injectedBundlePath = WKStringCreateWithUTF8CString("/usr/lib/libWPEInjectedBundle.so");
     WKContextConfigurationSetInjectedBundlePath(contextConfiguration, injectedBundlePath);
+
+    gchar *wpeStoragePath = g_build_filename(g_get_user_cache_dir(), "wpe", "local-storage", nullptr);
+    g_mkdir_with_parents(wpeStoragePath, 0700);
+    auto storageDirectory = WKStringCreateWithUTF8CString(wpeStoragePath);
+    g_free(wpeStoragePath);
+    WKContextConfigurationSetLocalStorageDirectory(contextConfiguration, storageDirectory);
+
+    gchar *wpeDiskCachePath = g_build_filename(g_get_user_cache_dir(), "wpe", "disk-cache", nullptr);
+    g_mkdir_with_parents(wpeDiskCachePath, 0700);
+    auto diskCacheDirectory = WKStringCreateWithUTF8CString(wpeDiskCachePath);
+    g_free(wpeDiskCachePath);
+    WKContextConfigurationSetDiskCacheDirectory(contextConfiguration, diskCacheDirectory);
+
     WKRelease(injectedBundlePath);
 
     WKContextRef context = WKContextCreateWithConfiguration(contextConfiguration);
