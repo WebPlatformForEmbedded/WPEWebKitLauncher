@@ -74,6 +74,9 @@ int main(int argc, char* argv[])
     WKRelease(injectedBundlePath);
 
     WKContextRef context = WKContextCreateWithConfiguration(contextConfiguration);
+
+    WKContextSetCacheModel(context, kWKCacheModelEnvVarOverride);
+
     WKRelease(contextConfiguration);
 
     auto pageGroupIdentifier = WKStringCreateWithUTF8CString("WPEPageGroup");
