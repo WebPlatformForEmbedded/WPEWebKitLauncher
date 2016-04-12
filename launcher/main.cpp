@@ -96,6 +96,10 @@ int main(int argc, char* argv[])
     WKPageConfigurationSetPageGroup(pageConfiguration, pageGroup);
     WKPreferencesSetFullScreenEnabled(preferences, true);
 
+
+    if (g_getenv("WPE_SHELL_DISABLE_MEDIA_DISK_CACHE"))
+      WKPreferencesSetMediaDataLoadsAutomatically(preferences, false);
+
     if (!!g_getenv("WPE_SHELL_COOKIE_STORAGE")) {
       gchar *cookieDatabasePath = g_build_filename(g_get_user_cache_dir(), "cookies.db", nullptr);
       auto path = WKStringCreateWithUTF8CString(cookieDatabasePath);
