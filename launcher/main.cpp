@@ -51,6 +51,24 @@ WKPageNavigationClientV0 s_navigationClient = {
     nullptr, // didRemoveNavigationGestureSnapshot
 };
 
+WKViewClientV0 s_viewClient = {
+    { 0, nullptr },
+    // frameDisplayed
+    [](WKViewRef, const void*) {
+        static unsigned s_frameCount = 0;
+        static gint64 lastDumpTime = g_get_monotonic_time();
+
+        ++s_frameCount;
+        gint64 time = g_get_monotonic_time();
+        if (time - lastDumpTime >= 5 * G_USEC_PER_SEC) {
+            fprintf(stderr, "[WPELauncher] %.2fFPS\n",
+                s_frameCount * G_USEC_PER_SEC * 1.0 / (time - lastDumpTime));
+            s_frameCount = 0;
+            lastDumpTime = time;
+        }
+    },
+};
+
 int main(int argc, char* argv[])
 {
     GMainLoop* loop = g_main_loop_new(nullptr, FALSE);
@@ -105,6 +123,8 @@ int main(int argc, char* argv[])
     }
 
     auto view = WKViewCreate(pageConfiguration);
+    WKViewSetViewClient(view, &s_viewClient.base);
+
     auto page = WKViewGetPage(view);
     WKPageSetPageNavigationClient(page, &s_navigationClient.base);
 
