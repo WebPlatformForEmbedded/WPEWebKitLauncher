@@ -1,9 +1,11 @@
 #include <WPE/WebKit.h>
 #include <WPE/WebKit/WKCookieManagerSoup.h>
+#include <WPE/WebKit/WKUserMediaPermissionRequest.h>
 
 #include <cstdio>
 #include <glib.h>
 #include <initializer_list>
+#include <string.h>
 
 WKPageNavigationClientV0 s_navigationClient = {
     { 0, nullptr },
@@ -69,6 +71,30 @@ WKViewClientV0 s_viewClient = {
     },
 };
 
+WKPageUIClientV6 s_uiClient;
+
+static void decidePolicyForUserMediaPermissionRequestCallBack(WKPageRef, WKFrameRef, WKSecurityOriginRef, WKSecurityOriginRef, WKUserMediaPermissionRequestRef permissionRequest, const void*)
+{
+    WKArrayRef audioDeviceUIDs = WKUserMediaPermissionRequestAudioDeviceUIDs(permissionRequest);
+    WKArrayRef videoDeviceUIDs = WKUserMediaPermissionRequestVideoDeviceUIDs(permissionRequest);
+
+    if (WKArrayGetSize(videoDeviceUIDs) || WKArrayGetSize(audioDeviceUIDs)) {
+        WKStringRef videoDeviceUID;
+        if (WKArrayGetSize(videoDeviceUIDs))
+            videoDeviceUID = reinterpret_cast<WKStringRef>(WKArrayGetItemAtIndex(videoDeviceUIDs, 0));
+        else
+            videoDeviceUID = WKStringCreateWithUTF8CString("");
+
+        WKStringRef audioDeviceUID;
+        if (WKArrayGetSize(audioDeviceUIDs))
+            audioDeviceUID = reinterpret_cast<WKStringRef>(WKArrayGetItemAtIndex(audioDeviceUIDs, 0));
+        else
+            audioDeviceUID = WKStringCreateWithUTF8CString("");
+
+        WKUserMediaPermissionRequestAllow(permissionRequest, audioDeviceUID, videoDeviceUID);
+    }
+}
+
 int main(int argc, char* argv[])
 {
     GMainLoop* loop = g_main_loop_new(nullptr, FALSE);
@@ -127,6 +153,10 @@ int main(int argc, char* argv[])
 
     auto page = WKViewGetPage(view);
     WKPageSetPageNavigationClient(page, &s_navigationClient.base);
+    memset(&s_uiClient, 0, sizeof(s_uiClient));
+    s_uiClient.base.version = 6;
+    s_uiClient.decidePolicyForUserMediaPermissionRequest = decidePolicyForUserMediaPermissionRequestCallBack;
+    WKPageSetPageUIClient(page, &s_uiClient.base);
 
     const char* url = "http://youtube.com/tv";
     if (argc > 1)
