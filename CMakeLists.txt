@@ -7,6 +7,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 find_package(WPEWebKit REQUIRED)
 
+find_package(PkgConfig)
+pkg_search_module(GLib REQUIRED glib-2.0)
+
+
 file(WRITE ${CMAKE_BINARY_DIR}/test_atomic.cpp
      "#include <atomic>\n"
      "int main() { std::atomic<int64_t> i(0); i++; return 0; }\n")
