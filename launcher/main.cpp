@@ -58,10 +58,13 @@ WKViewClientV0 s_viewClient = {
         static unsigned s_frameCount = 0;
         static gint64 lastDumpTime = g_get_monotonic_time();
 
+        if (!g_getenv("WPE_DISPLAY_FPS"))
+          return;
+
         ++s_frameCount;
         gint64 time = g_get_monotonic_time();
         if (time - lastDumpTime >= 5 * G_USEC_PER_SEC) {
-            fprintf(stderr, "[WPELauncher] %.2fFPS\n",
+            fprintf(stderr, "[WPELauncher] %.2f FPS\n",
                 s_frameCount * G_USEC_PER_SEC * 1.0 / (time - lastDumpTime));
             s_frameCount = 0;
             lastDumpTime = time;
