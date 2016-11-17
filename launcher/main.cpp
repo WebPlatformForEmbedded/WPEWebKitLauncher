@@ -125,23 +125,28 @@ int main(int argc, char* argv[])
       WKCookieManagerSetCookiePersistentStorage(cookieManager, path, kWKCookieStorageTypeSQLite);
     }
 
-    auto view = WKViewCreate(pageConfiguration);
-    WKViewSetViewClient(view, &s_viewClient.base);
+    auto view1 = WKViewCreate(pageConfiguration);
+    WKViewSetViewClient(view1, &s_viewClient.base);
 
-    auto page = WKViewGetPage(view);
-    WKPageSetPageNavigationClient(page, &s_navigationClient.base);
+    auto view2 = WKViewCreate(pageConfiguration);
+    WKViewSetViewClient(view2, &s_viewClient.base);
 
-    const char* url = "http://youtube.com/tv";
-    if (argc > 1)
-        url = argv[1];
+    auto loadView = [](WKViewRef view) {
+        auto page = WKViewGetPage(view);
+        WKPageSetPageNavigationClient(page, &s_navigationClient.base);
 
-    auto shellURL = WKURLCreateWithUTF8CString(url);
-    WKPageLoadURL(page, shellURL);
-    WKRelease(shellURL);
+        const char* url = "https://webkit.org/blog-files/3d-transforms/poster-circle.html";
+        auto shellURL = WKURLCreateWithUTF8CString(url);
+        WKPageLoadURL(page, shellURL);
+        WKRelease(shellURL);
+    };
+    loadView(view1);
+    loadView(view2);
 
     g_main_loop_run(loop);
 
-    WKRelease(view);
+    WKRelease(view1);
+    WKRelease(view2);
     WKRelease(pageConfiguration);
     WKRelease(pageGroup);
     WKRelease(context);
