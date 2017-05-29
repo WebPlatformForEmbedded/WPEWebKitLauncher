@@ -105,6 +105,7 @@ int main(int argc, char* argv[])
     // Allow mixed content.
     WKPreferencesSetAllowRunningOfInsecureContent(preferences, true);
     WKPreferencesSetAllowDisplayOfInsecureContent(preferences, true);
+    WKPreferencesSetWebSecurityEnabled(preferences, false);
 
     // By default allow console log messages to system console reporting.
     if (!g_getenv("WPE_SHELL_DISABLE_CONSOLE_LOG"))
