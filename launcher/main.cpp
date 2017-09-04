@@ -27,9 +27,11 @@
 #include <WPE/WebKit.h>
 #include <WPE/WebKit/WKCookieManagerSoup.h>
 
+#include "input.h"
 #include <cstdio>
 #include <glib.h>
 #include <initializer_list>
+#include <wpe/view-backend.h>
 
 WKPageNavigationClientV0 s_navigationClient = {
     { 0, nullptr },
@@ -98,6 +100,21 @@ WKViewClientV0 s_viewClient = {
     },
 };
 
+class InputGlue : public Input::Client {
+public:
+    InputGlue(struct wpe_view_backend* backend)
+        : m_backend(backend)
+    { }
+
+private:
+    void handleKeyboardEvent(struct wpe_input_keyboard_event* event)
+    {
+        wpe_view_backend_dispatch_keyboard_event(m_backend, event);
+    }
+
+    struct wpe_view_backend* m_backend;
+};
+
 int main(int argc, char* argv[])
 {
     GMainLoop* loop = g_main_loop_new(nullptr, FALSE);
@@ -155,6 +172,10 @@ int main(int argc, char* argv[])
     auto view = WKViewCreate(pageConfiguration);
     WKViewSetViewClient(view, &s_viewClient.base);
 
+    struct wpe_view_backend* viewBackend = WKViewGetViewBackend(view);
+    InputGlue inputGlue(viewBackend);
+    std::unique_ptr<Input> input(new Input(&inputGlue));
+
     auto page = WKViewGetPage(view);
     WKPageSetPageNavigationClient(page, &s_navigationClient.base);
 
@@ -168,6 +189,7 @@ int main(int argc, char* argv[])
 
     g_main_loop_run(loop);
 
+    input = nullptr;
     WKRelease(view);
     WKRelease(pageConfiguration);
     WKRelease(pageGroup);
