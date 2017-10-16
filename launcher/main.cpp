@@ -69,7 +69,11 @@ WKPageNavigationClientV0 s_navigationClient = {
     nullptr, // renderingProgressDidChange
     nullptr, // canAuthenticateAgainstProtectionSpace
     nullptr, // didReceiveAuthenticationChallenge
-    nullptr, // webProcessDidCrash
+    // webProcessDidCrash
+    [](WKPageRef page, const void*) {
+        fprintf(stderr, "WARNING: WebProcess crashed: restarting it ...\n");
+        WKPageReload(page);
+    },
     nullptr, // copyWebCryptoMasterKey
     nullptr, // didBeginNavigationGesture
     nullptr, // willEndNavigationGesture
