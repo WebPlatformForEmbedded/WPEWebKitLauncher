@@ -8,8 +8,18 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 find_package(WPEWebKit REQUIRED)
 
 find_package(PkgConfig)
-pkg_search_module(GLib REQUIRED glib-2.0)
+pkg_search_module(PC_GLIB REQUIRED glib-2.0)
 
+set(GLIB_LIBRARIES )
+foreach(lib ${PC_GLIB_LIBRARIES})
+    find_library(GLIB_LIBRARY
+        NAMES ${lib}
+        HINTS ${PC_GLIB_LIBDIR} ${PC_GLIB_LIBRARY_DIRS}
+        )
+    list(APPEND GLIB_LIBRARIES ${GLIB_LIBRARY})
+endforeach()
+
+set(GLIB_INCLUDE_DIRS ${PC_GLIB_INCLUDE_DIRS})
 
 file(WRITE ${CMAKE_BINARY_DIR}/test_atomic.cpp
      "#include <atomic>\n"
