@@ -31,7 +31,7 @@ find_package(PkgConfig)
 pkg_check_modules(PC_WPE_WEBKIT wpe-webkit)
 
 find_path(WPE_WEBKIT_INCLUDE_DIR
-    NAMES WPE/WebKit.h
+    NAMES WPE/WebKit/WebKit.h
     HINTS ${PC_WPE_WEBKIT_INCLUDEDIR} ${PC_WPE_WEBKIT_INCLUDE_DIRS}
     PATH_SUFFIXES wpe-0.1
 )

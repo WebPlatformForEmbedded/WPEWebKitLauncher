@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <WPE/WebKit.h>
+#include <WPE/WebKit/WebKit.h>
 
 #include <cstdio>
 #include <memory>

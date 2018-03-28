@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <WPE/WebKit.h>
+#include <WPE/WebKit/WebKit.h>
 #include <WPE/WebKit/WKCookieManagerSoup.h>
 
 #include <cstdio>
@@ -156,7 +156,7 @@ int main(int argc, char* argv[])
       WKCookieManagerSetCookiePersistentStorage(cookieManager, path, kWKCookieStorageTypeSQLite);
     }
 
-    auto view = WKViewCreate(pageConfiguration);
+    auto view = WKViewCreate(nullptr, pageConfiguration);
     WKViewSetViewClient(view, &s_viewClient.base);
 
     auto page = WKViewGetPage(view);
