@@ -30,6 +30,7 @@
 #include <cstdio>
 #include <glib.h>
 #include <initializer_list>
+#include <stdlib.h>
 
 WKPageNavigationClientV0 s_navigationClient = {
     { 0, nullptr },
@@ -71,8 +72,9 @@ WKPageNavigationClientV0 s_navigationClient = {
     nullptr, // didReceiveAuthenticationChallenge
     // webProcessDidCrash
     [](WKPageRef page, const void*) {
-        fprintf(stderr, "WARNING: WebProcess crashed: restarting it ...\n");
-        WKPageReload(page);
+	 fprintf(stderr, "ERROR: WebProcess crashed: exiting ...\n");
+	 fflush(stderr);
+	 exit(1);
     },
     nullptr, // copyWebCryptoMasterKey
     nullptr, // didBeginNavigationGesture
