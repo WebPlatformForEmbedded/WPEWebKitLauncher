@@ -26,6 +26,7 @@
 
 #include <WPE/WebKit.h>
 #include <WPE/WebKit/WKCookieManagerSoup.h>
+#include <wpe/wpe.h>
 
 #include <cstdio>
 #include <glib.h>
@@ -158,7 +159,7 @@ int main(int argc, char* argv[])
       WKCookieManagerSetCookiePersistentStorage(cookieManager, path, kWKCookieStorageTypeSQLite);
     }
 
-    auto view = WKViewCreate(pageConfiguration);
+    auto view = WKViewCreate(wpe_view_backend_create(), pageConfiguration);
     WKViewSetViewClient(view, &s_viewClient.base);
 
     auto page = WKViewGetPage(view);
