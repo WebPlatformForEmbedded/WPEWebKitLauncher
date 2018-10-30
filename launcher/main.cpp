@@ -143,6 +143,12 @@ int main(int argc, char* argv[])
     if (!g_getenv("WPE_SHELL_DISABLE_CONSOLE_LOG"))
       WKPreferencesSetLogsPageMessagesToSystemConsoleEnabled(preferences, true);
 
+    if (const char* value = g_getenv("WEBKIT_INSPECTOR_SERVER")) {
+        // Very naïve check for <ip>:<port>
+        if (strlen(value) > 2 && strchr(value, ':'))
+            WKPreferencesSetDeveloperExtrasEnabled(preferences, true);
+    }
+
     WKPageGroupSetPreferences(pageGroup, preferences);
 
     auto pageConfiguration  = WKPageConfigurationCreate();
