@@ -34,7 +34,7 @@ pkg_check_modules(PC_WPE wpe-0.2)
 find_path(WPE_WEBKIT_INCLUDE_DIR
     NAMES WPE/WebKit.h
     HINTS ${PC_WPE_WEBKIT_INCLUDEDIR} ${PC_WPE_WEBKIT_INCLUDE_DIRS}
-    PATH_SUFFIXES wpe-0.1
+    PATH_SUFFIXES wpe-webkit-deprecated-0.1
 )
 
 find_path(WPE_INCLUDE_DIRS
